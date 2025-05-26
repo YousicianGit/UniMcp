@@ -1,6 +1,8 @@
 # UniMcp
 
-UniMcp enables AI assistants to interact with Unity through a standardized interface.
+UniMcp enables AI assistants like Cursor and Windsurf to interact with Unity.
+
+<img width="1229" alt="UniMcp" src="https://github.com/user-attachments/assets/8c04f597-af5d-4066-900a-f1734f94c835" />
 
 ## Functions
 
