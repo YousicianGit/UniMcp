@@ -1,0 +1,28 @@
+name: UniMcp checks
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  UniMcp:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8
+
+    - name: Restore dependencies
+      run: dotnet restore UniMcp.sln
+
+    - name: Build
+      run: dotnet build --no-restore
+
+    - name: Test
+      run: dotnet test --no-build

@@ -1,0 +1,10 @@
+{
+  "name": "com.yousician.unimcp.client",
+  "version": "1.0.0",
+  "displayName": "UniMcp Client",
+  "description": "Unity MCP Client",
+  "unity": "2022.3",
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "3.2.1"
+  }
+}

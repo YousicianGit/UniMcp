@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>9</LangVersion>
+        <Nullable>enable</Nullable>
+        <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Include="**/*.cs" />
+      <Compile Remove="Unity/**/*.cs" />
+      <None Include="Unity/**/*.cs" />
+      <Compile Remove="**/*.Unity.cs" />
+      <None Include="**/*.Unity.cs" />
+      <None Remove="**/*.meta" />
+      <None Remove="**/*.asmdef" />
+      <None Remove="**/*.asset" />
+      <None Remove="**/*.prefab" />
+      <None Remove="**/*.unity" />
+    </ItemGroup>
+
+</Project>
