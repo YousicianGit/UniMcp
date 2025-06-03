@@ -23,6 +23,8 @@ UniMcp enables AI assistants like Cursor and Windsurf to interact with Unity.
 4. In Unity, open Tools > UniMcp and press the configure button of your IDE.
 
 > [!NOTE]
+> If you are using Visual Studio Code, you can configure the MCP server for cursor and it will be discovered automatically.
+>
 > If your IDE is not listed, you can press "Copy Config to Clipboard" and paste it into your IDE.
 
 5. Start the MCP server in your IDE.

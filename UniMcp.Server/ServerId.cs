@@ -13,7 +13,7 @@ public static class ServerId
 			var match = Regex.Match(codeiumEnvVar, "([^/]+)/plugins/codeium");
 			if (match is { Success: true, Groups.Count: > 1 })
 			{
-				return match.Groups[1].Value;
+				return $"Windsurf {match.Groups[1].Value}";
 			}
 
 			return "Windsurf";
@@ -23,6 +23,23 @@ public static class ServerId
 		if (cursorEnvVar != null)
 		{
 			return "Cursor";
+		}
+
+		var copilotEnvVar = Environment.GetEnvironmentVariable("PKG_EXECPATH");
+		if (copilotEnvVar != null)
+		{
+			copilotEnvVar = copilotEnvVar.Replace("\\", "/");
+			var match = Regex.Match(copilotEnvVar, "([^/]+)/plugins/github-copilot-intellij");
+			if (match is { Success: true, Groups.Count: > 1 })
+			{
+				return $"Copilot {match.Groups[1].Value}";
+			}
+		}
+
+		var vsCodeEnvVar = Environment.GetEnvironmentVariable("VSCODE_CWD");
+		if (vsCodeEnvVar != null)
+		{
+			return "Visual Studio Code";
 		}
 
 		return Path.GetFileName(Directory.GetCurrentDirectory());
