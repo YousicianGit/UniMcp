@@ -15,6 +15,7 @@ builder.Logging.AddConsole(options =>
 builder.Logging.AddFile(options =>
 {
 	options.RootPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+	options.TextBuilder = new ServerIdLogTextBuilder();
 	options.Files =
 	[
 		new LogFileOptions

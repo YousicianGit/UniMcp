@@ -8,7 +8,20 @@ namespace UniMcp.Client
 {
 	internal static class ConfigurationHelper
 	{
-		private record ServerConfig(string ConfigDir, string ConfigFileName);
+		private const string DefaultConfigRoot = "mcpServers";
+
+		private record ServerConfig(string ConfigDir, string ConfigFileName, string JsonRoot = DefaultConfigRoot);
+
+		private static readonly ServerConfig CopilotConfig = new(
+			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".config", "github-copilot", "intellij"),
+			"mcp.json",
+			"servers"
+		);
+
+		private static readonly ServerConfig CursorConfig = new(
+			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".cursor"),
+			"mcp.json"
+		);
 
 		private static readonly ServerConfig JetBrainsWindsurfConfig = new(
 			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".codeium"),
@@ -20,16 +33,12 @@ namespace UniMcp.Client
 			"mcp_config.json"
 		);
 
-		private static readonly ServerConfig CursorConfig = new(
-			Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".cursor"),
-			"mcp.json"
-		);
-
 		public static readonly Dictionary<string, Func<string>> ConfigActions = new()
 		{
-			{ "Configure JetBrains Windsurf", () => Configure(JetBrainsWindsurfConfig) },
-			{ "Configure Windsurf", () => Configure(WindsurfConfig) },
+			{ "Configure Copilot (JetBrains)", () => Configure(CopilotConfig) },
 			{ "Configure Cursor", () => Configure(CursorConfig) },
+			{ "Configure Windsurf", () => Configure(WindsurfConfig) },
+			{ "Configure Windsurf (JetBrains)", () => Configure(JetBrainsWindsurfConfig) },
 			{ "Copy Config to Clipboard", CopyConfigToClipboard },
 		};
 
@@ -42,11 +51,24 @@ namespace UniMcp.Client
 				Directory.CreateDirectory(config.ConfigDir);
 			}
 
-			var mcpConfig = File.Exists(configPath)
-				? JObject.Parse(File.ReadAllText(configPath))
-				: new JObject();
+			JObject mcpConfig;
+			if (File.Exists(configPath))
+			{
+				try
+				{
+					mcpConfig = JObject.Parse(File.ReadAllText(configPath));
+				}
+				catch (JsonException)
+				{
+					mcpConfig = new JObject();
+				}
+			}
+			else
+			{
+				mcpConfig = new JObject();
+			}
 
-			CreateUniMcpServerConfig(mcpConfig);
+			CreateUniMcpServerConfig(mcpConfig, config.JsonRoot);
 
 			var updatedJson = mcpConfig.ToString(Formatting.Indented);
 			File.WriteAllText(configPath, updatedJson);
@@ -54,11 +76,11 @@ namespace UniMcp.Client
 			return $"✓ Configuration file updated: {configPath}";
 		}
 
-		private static void CreateUniMcpServerConfig(JObject config)
+		private static void CreateUniMcpServerConfig(JObject config, string root)
 		{
-			config["mcpServers"] ??= new JObject();
+			config[root] ??= new JObject();
 
-			var mcpServers = (JObject)config["mcpServers"]!;
+			var mcpServers = (JObject)config[root]!;
 			mcpServers["UniMcp"] = new JObject
 			{
 				["command"] = "dotnet",
@@ -75,7 +97,7 @@ namespace UniMcp.Client
 		private static string CopyConfigToClipboard()
 		{
 			var config = new JObject();
-			CreateUniMcpServerConfig(config);
+			CreateUniMcpServerConfig(config, DefaultConfigRoot);
 #if UNITY_EDITOR
 			UnityEditor.EditorGUIUtility.systemCopyBuffer = config.ToString(Formatting.Indented);
 #endif

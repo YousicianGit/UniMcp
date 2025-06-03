@@ -47,7 +47,15 @@ namespace UniMcp.Client.Commands
 						editModeResult.FailedTestCount + playModeResult.FailedTestCount,
 						editModeResult.FailedTests.Concat(playModeResult.FailedTests).ToArray()
 					);
-					this.Complete(summary);
+
+					if (summary is { PassedTestCount: 0, FailedTestCount: 0 })
+					{
+						this.Complete("Error: No tests matched the filter. Provide a namespace or class name.");
+					}
+					else
+					{
+						this.Complete(summary);
+					}
 				}
 			}
 		}
