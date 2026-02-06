@@ -97,8 +97,11 @@ namespace UniMcp.Client
 				}
 				catch (Exception e)
 				{
-					this.state.Discovery.UpdateState($"Discovery error:\n{e}", State.Error);
-					await Task.Delay(5000, cancellationToken);
+					if (!this.cancellationTokenSource.IsCancellationRequested)
+					{
+						this.state.Discovery.UpdateState($"Discovery error:\n{e}", State.Error);
+						await Task.Delay(5000, cancellationToken);
+					}
 				}
 			}
 

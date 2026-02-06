@@ -53,12 +53,12 @@ List available tools:
 Run all tests:
 
 ```json
-{"jsonrpc":"2.0", "id":1, "method":"tools/call", "params": {"name": "RunTests", "arguments": {"testFilter": ""}}}
+{"jsonrpc":"2.0", "id":1, "method":"tools/call", "params": {"name": "run_tests", "arguments": {"testFilter": ""}}}
 ```
 
 Compile the code:
 ```json
-{"jsonrpc":"2.0", "id":1, "method":"tools/call", "params": {"name": "Compile" }}
+{"jsonrpc":"2.0", "id":1, "method":"tools/call", "params": {"name": "compile" }}
 ```
 
 ### Debugging

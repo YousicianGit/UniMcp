@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEditor;
 
 namespace UniMcp.Client.Unity
@@ -5,7 +6,7 @@ namespace UniMcp.Client.Unity
 	[InitializeOnLoad]
 	internal static class UnityEditorBridge
 	{
-		private static readonly ServerDiscovery Discovery;
+		private static ServerDiscovery Discovery;
 
 		static UnityEditorBridge()
 		{
@@ -17,6 +18,13 @@ namespace UniMcp.Client.Unity
 				Discovery.Dispose();
 			};
 			EditorApplication.update += Update;
+		}
+
+		public static async Task Restart()
+		{
+			Discovery.Dispose();
+			await Task.Delay(1000); // Wait a bit for the previous server to dispose
+			Discovery = new ServerDiscovery(UnityBridgeState.instance);
 		}
 
 		private static void Update()

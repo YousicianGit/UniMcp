@@ -56,6 +56,13 @@ namespace UniMcp.Client.Unity
 
 			EditorGUILayout.BeginVertical(GUILayout.MaxWidth(500));
 
+			if (GUILayout.Button("Restart MCP", GUILayout.Height(30)))
+			{
+				_ = UnityEditorBridge.Restart();
+			}
+
+			EditorGUILayout.Space();
+
 			foreach (var configAction in ConfigurationHelper.ConfigActions)
 			{
 				if (GUILayout.Button(configAction.Key, GUILayout.Height(30)))
