@@ -69,21 +69,7 @@ namespace UniMcp.Client.Unity
 
 			var failedTests = result.Children
 				.SelectMany(GetLeafChildrenWithFailures)
-				.Select(r =>
-				{
-					var message = r.Message;
-
-					if (!string.IsNullOrEmpty(r.StackTrace))
-					{
-						message += $"\n{r.StackTrace}";
-					}
-
-					if (!string.IsNullOrEmpty(r.Output))
-					{
-						message += $"\n{r.Output}";
-					}
-					return new TestDetails(r.FullName, r.ResultState, message);
-				})
+				.Select(r => new TestDetails(r.FullName, r.ResultState, r.Message))
 				.ToArray();
 
 			this.result = new TestSummary(result.PassCount, result.FailCount, failedTests);

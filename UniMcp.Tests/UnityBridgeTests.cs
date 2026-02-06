@@ -30,8 +30,8 @@ namespace UniMcp.Tests
 		}
 
 		[Test]
-		[Timeout(1000)]
-		public async Task Command_ShouldBeSentToClient()
+		[CancelAfter(1000)]
+		public async Task Command_ShouldBeSentToClient(CancellationToken cancellationToken)
 		{
 			this.server = new UnityBridgeServer(this.serverLogger);
 			this.client = new UnityBridgeClient(this.server.EndPoint.Port, this.state);
@@ -41,15 +41,15 @@ namespace UniMcp.Tests
 
 			while (this.client.Command == null)
 			{
-				await Task.Delay(10);
+				await Task.Delay(10, cancellationToken);
 			}
 
 			this.client.Command.Should().NotBeNull();
 		}
 
 		[Test]
-		[Timeout(1000)]
-		public async Task Command_ShouldCompleteWithResult()
+		[CancelAfter(1000)]
+		public async Task Command_ShouldCompleteWithResult(CancellationToken cancellationToken)
 		{
 			this.server = new UnityBridgeServer(this.serverLogger);
 			this.client = new UnityBridgeClient(this.server.EndPoint.Port, this.state);
@@ -60,7 +60,7 @@ namespace UniMcp.Tests
 			// Wait for command to be received by client
 			while (this.client.Command == null)
 			{
-				await Task.Delay(10);
+				await Task.Delay(10, cancellationToken);
 			}
 
 			var expectedResult = "Compilation successful";

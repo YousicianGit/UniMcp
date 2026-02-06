@@ -31,8 +31,8 @@ namespace UniMcp.Tests
 		}
 
 		[Test]
-		[Timeout(1000)]
-		public async Task Client_IsCreatedFromBroadcast_WhenDiscoveryStartsFirst()
+		[CancelAfter(1000)]
+		public async Task Client_IsCreatedFromBroadcast_WhenDiscoveryStartsFirst(CancellationToken cancellationToken)
 		{
 			this.discovery = new ServerDiscovery(this.state);
 			this.broadcaster = new ServerBroadcaster(this.broadcasterLogger, this.server);
@@ -40,13 +40,13 @@ namespace UniMcp.Tests
 			// Wait for client to be created
 			while (this.state.Clients.Count == 0)
 			{
-				await Task.Delay(10);
+				await Task.Delay(10, cancellationToken);
 			}
 		}
 
 		[Test]
-		[Timeout(2000)] // Broadcasting happens every second, so this test will take slightly longer than a second to run
-		public async Task Client_IsCreatedFromBroadcast_WhenBroadcastStartsFirst()
+		[CancelAfter(2000)] // Broadcasting happens every second, so this test will take slightly longer than a second to run
+		public async Task Client_IsCreatedFromBroadcast_WhenBroadcastStartsFirst(CancellationToken cancellationToken)
 		{
 			this.broadcaster = new ServerBroadcaster(this.broadcasterLogger, this.server);
 			this.discovery = new ServerDiscovery(this.state);
@@ -54,13 +54,13 @@ namespace UniMcp.Tests
 			// Wait for client to be created
 			while (this.state.Clients.Count == 0)
 			{
-				await Task.Delay(10);
+				await Task.Delay(10, cancellationToken);
 			}
 		}
 
 		[Test]
-		[Timeout(1000)]
-		public async Task MultipleServerBroadcasters_DoNotConflict()
+		[CancelAfter(1000)]
+		public async Task MultipleServerBroadcasters_DoNotConflict(CancellationToken cancellationToken)
 		{
 			this.broadcaster = new ServerBroadcaster(this.broadcasterLogger, this.server);
 			this.discovery = new ServerDiscovery(this.state);
@@ -68,7 +68,7 @@ namespace UniMcp.Tests
 
 			while (this.state.Clients.Count < 1)
 			{
-				await Task.Delay(10);
+				await Task.Delay(10, cancellationToken);
 			}
 		}
 	}
